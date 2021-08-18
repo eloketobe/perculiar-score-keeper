@@ -20,44 +20,56 @@ class Solution {
         }
     }
 
-    public static int addLastTwoIntegers(String op, ArrayList filteredOps) {
-        int firstNumber=0;
+    public static int getSumOfLastTwoIntegers(String op, ArrayList filteredOps) {
+        int firstNumber = 0;
         int firstNumberIndex;
-        int secondNumber=0;
+        int secondNumber = 0;
 
         for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
             if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
-
-
                 firstNumberIndex = (filteredOps.indexOf(op) - i);
                 firstNumber = Integer.parseInt((String) filteredOps.get((filteredOps.indexOf(op) - i)));
                 System.out.println("First number is " + firstNumber);
-
-
                 for (int j = 1; i < (firstNumberIndex + 1); i++) {
-
-
                     if (isInteger((String) filteredOps.get((firstNumberIndex - i)))) {
-
-
                         secondNumber = Integer.parseInt((String) filteredOps.get((firstNumberIndex - i)));
                         System.out.println("Second number is " + secondNumber);
-
                         break;
-
                     }
-
-
                 }
 
                 break;
             }
         }
 
-        System.out.println("The summ of " +firstNumber+" and "+secondNumber +" is " + (firstNumber+secondNumber));
-        return firstNumber+secondNumber;
+        System.out.println("The sum of " + firstNumber + " and " + secondNumber + " is " + (firstNumber + secondNumber));
+        return firstNumber + secondNumber;
 
     }
+
+
+
+
+    public static int doubleLastInteger(String op, ArrayList filteredOps) {
+        int lastNumber = 0;
+
+
+        for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
+            if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
+
+                lastNumber = Integer.parseInt((String) filteredOps.get((filteredOps.indexOf(op) - i)));
+                System.out.println("First number is " + lastNumber);
+
+
+                break;
+            }
+        }
+
+        System.out.println("Double of " + lastNumber +   " is " + (lastNumber *2));
+        return lastNumber*2 ;
+
+    }
+
 
 
     public static int getIndexForCop(String op, ArrayList filteredOps) {
@@ -78,8 +90,19 @@ class Solution {
     }
 
 
+    public static ArrayList<Integer> getIntegerArray(ArrayList<String> stringArray) {
+        ArrayList<Integer> integerList = new ArrayList<Integer>();
+        for(String stringValue : stringArray) {
+
+                integerList.add(Integer.parseInt(stringValue));
+
+        }
+        return integerList;
+    }
+
+
     public static int calPoints(String[] ops) {
-        int result = 0;
+        int result =0;
 
         String[] filteredOpsArray = Arrays.stream(ops).filter(element -> !element.equals("")).toArray(String[]::new);
         ArrayList<String> filteredOpsArrayList = new ArrayList<>(Arrays.asList(filteredOpsArray));
@@ -93,13 +116,17 @@ class Solution {
                 }
             } else if (op.equalsIgnoreCase("d")) {
                 System.out.println("this is d");
+
+                filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(doubleLastInteger(op, filteredOpsArrayList)));
+
+
+
+
             } else if (op.equalsIgnoreCase("+")) {
 
                 System.out.println("this is +");
 
-                filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(addLastTwoIntegers(op, filteredOpsArrayList)));
-
-
+                filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(getSumOfLastTwoIntegers(op, filteredOpsArrayList)));
 
 
             } else if (op.equalsIgnoreCase("c")) {
@@ -109,18 +136,23 @@ class Solution {
                     System.out.println(e);
                 }
                 filteredOpsArrayList.remove(op);
-            }else {
+            } else {
                 System.out.println("Invalid entry");
                 filteredOpsArrayList.remove(op);
 
-
             }
 
-
         }
-
-
         System.out.println(filteredOpsArrayList);
+
+
+
+
+
+
+        for(int op : getIntegerArray(filteredOpsArrayList)) {
+            result += op;
+        }
 
 
         return result;
