@@ -20,6 +20,43 @@ class Solution {
         }
     }
 
+    public static void addLastTwoIntegers(String op, ArrayList filteredOps) {
+        int firstNumber=0;
+        int firstNumberIndex;
+        int secondNumber=0;
+
+        for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
+            if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
+
+
+                firstNumberIndex = (filteredOps.indexOf(op) - i);
+                firstNumber = Integer.parseInt((String) filteredOps.get((filteredOps.indexOf(op) - i)));
+                System.out.println("First number is " + firstNumber);
+
+
+                for (int j = 1; i < (firstNumberIndex + 1); i++) {
+
+
+                    if (isInteger((String) filteredOps.get((firstNumberIndex - i)))) {
+
+
+                        secondNumber = Integer.parseInt((String) filteredOps.get((firstNumberIndex - i)));
+                        System.out.println("Second number is " + secondNumber);
+
+                        break;
+
+                    }
+
+
+                }
+
+                break;
+            }
+        }
+
+        System.out.println("The summ of " +firstNumber+" and "+secondNumber +" is " + (firstNumber+secondNumber));
+
+    }
 
 
     public static int getIndexForCop(String op, ArrayList filteredOps) {
@@ -56,6 +93,7 @@ class Solution {
             } else if (op.equalsIgnoreCase("d")) {
                 System.out.println("this is d");
             } else if (op.equalsIgnoreCase("+")) {
+                addLastTwoIntegers(op, filteredOpsArrayList);
                 System.out.println("this is +");
             } else if (op.equalsIgnoreCase("c")) {
                 try {
@@ -63,7 +101,7 @@ class Solution {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-                filteredOpsArrayList.remove(filteredOpsArrayList.indexOf(op));
+                filteredOpsArrayList.remove(op);
             }
 
 
@@ -71,7 +109,6 @@ class Solution {
 
 
         System.out.println(filteredOpsArrayList);
-
 
 
         return result;
