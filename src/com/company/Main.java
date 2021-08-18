@@ -20,7 +20,7 @@ class Solution {
         }
     }
 
-    public static void addLastTwoIntegers(String op, ArrayList filteredOps) {
+    public static int addLastTwoIntegers(String op, ArrayList filteredOps) {
         int firstNumber=0;
         int firstNumberIndex;
         int secondNumber=0;
@@ -55,6 +55,7 @@ class Solution {
         }
 
         System.out.println("The summ of " +firstNumber+" and "+secondNumber +" is " + (firstNumber+secondNumber));
+        return firstNumber+secondNumber;
 
     }
 
@@ -93,8 +94,14 @@ class Solution {
             } else if (op.equalsIgnoreCase("d")) {
                 System.out.println("this is d");
             } else if (op.equalsIgnoreCase("+")) {
-                addLastTwoIntegers(op, filteredOpsArrayList);
+
                 System.out.println("this is +");
+
+                filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(addLastTwoIntegers(op, filteredOpsArrayList)));
+
+
+
+
             } else if (op.equalsIgnoreCase("c")) {
                 try {
                     filteredOpsArrayList.remove(getIndexForCop(op, filteredOpsArrayList));
@@ -102,6 +109,11 @@ class Solution {
                     System.out.println(e);
                 }
                 filteredOpsArrayList.remove(op);
+            }else {
+                System.out.println("Invalid entry");
+                filteredOpsArrayList.remove(op);
+
+
             }
 
 
