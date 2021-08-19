@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.*;
 import java.lang.*;
+import java.util.stream.Collectors;
 
 class Solution {
 
@@ -10,6 +11,7 @@ class Solution {
     }
 
     public static boolean isInteger(String str) {
+
         try {
             Integer.parseInt(str);
             return true;
@@ -43,25 +45,31 @@ class Solution {
         return firstNumber + secondNumber;
     }
 
-    public static int doubleLastInteger(String op, ArrayList filteredOps) {
-        int lastNumber = 0;
-        for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
-            if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
+    public static Comparable<Integer> getLastIntegerDoubled(String op, ArrayList filteredOps) {
 
-                lastNumber = Integer.parseInt((String) filteredOps.get((filteredOps.indexOf(op) - i)));
-                System.out.println("First number is " + lastNumber);
-                break;
-            }
+
+        try {
+            List<String> integersBeforeD = (List) filteredOps.stream().filter(e -> filteredOps.indexOf(e) < filteredOps.indexOf(op)).collect(Collectors.toList());
+
+            int lastElement = Integer.parseInt(integersBeforeD.get(integersBeforeD.size() - 1));
+
+            System.out.println("Double of " + lastElement + " is " + (lastElement * 2));
+
+            return lastElement * 2;
+        } catch (Exception e) {
+
+            if (e.toString().equals("java.lang.ArrayIndexOutOfBoundsException: -1"))
+
+                System.out.println("provide number before d");
+            else System.out.println(e);
+
+            return null;
         }
-        System.out.println("Double of " + lastNumber + " is " + (lastNumber * 2));
-        return lastNumber * 2;
+
     }
 
     public static int getIndexForCop(String op, ArrayList filteredOps) {
-//        if (filteredOps.indexOf(op) == 0) {
-//            System.out.println("Score list must contain at least one number");
-//            return 0;
-//        }
+
         int index = -1;
         for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
             if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
@@ -72,20 +80,23 @@ class Solution {
         return index;
     }
 
-
-
     public static int calPoints(String[] ops) {
         int result;
         String[] filteredOpsArray = Arrays.stream(ops).filter(element -> !element.equals("")).toArray(String[]::new);
         ArrayList<String> filteredOpsArrayList = new ArrayList<>(Arrays.asList(filteredOpsArray));
+
         for (String op : filteredOpsArray) {
             if (isInteger(op)) {
                 if (isBetween(Integer.parseInt(op), (-3 * 104), (3 * 104))) {
                     System.out.println("this is a number");
                 }
             } else if (op.equalsIgnoreCase("d")) {
-                System.out.println("this is d");
-                filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(doubleLastInteger(op, filteredOpsArrayList)));
+                if (getLastIntegerDoubled(op, filteredOpsArrayList) != null) {
+                    filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(getLastIntegerDoubled(op, filteredOpsArrayList)));
+                } else {
+                    filteredOpsArrayList.remove(op);
+                }
+
             } else if (op.equalsIgnoreCase("+")) {
                 System.out.println("this is +");
                 filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(getSumOfLastTwoIntegers(op, filteredOpsArrayList)));
