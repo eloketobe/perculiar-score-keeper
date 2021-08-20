@@ -45,14 +45,13 @@ class Solution {
         return firstNumber + secondNumber;
     }
 
-    public static Comparable<Integer> getLastIntegerDoubled(String op, ArrayList filteredOps) {
+    public static Integer getLastIntegerDoubled(String op, ArrayList filteredOps) {
 
 
         try {
             List<String> integersBeforeD = (List) filteredOps.stream().filter(e -> filteredOps.indexOf(e) < filteredOps.indexOf(op)).collect(Collectors.toList());
 
             int lastElement = Integer.parseInt(integersBeforeD.get(integersBeforeD.size() - 1));
-
             System.out.println("Double of " + lastElement + " is " + (lastElement * 2));
 
             return lastElement * 2;
@@ -60,7 +59,7 @@ class Solution {
 
             if (e.toString().equals("java.lang.ArrayIndexOutOfBoundsException: -1"))
 
-                System.out.println("provide number before d");
+                System.out.println("provide number before " + op + " operation");
             else System.out.println(e);
 
             return null;
@@ -68,17 +67,6 @@ class Solution {
 
     }
 
-    public static int getIndexForCop(String op, ArrayList filteredOps) {
-
-        int index = -1;
-        for (int i = 1; i < (filteredOps.indexOf(op) + 1); i++) {
-            if (isInteger((String) filteredOps.get((filteredOps.indexOf(op) - i)))) {
-                index = (filteredOps.indexOf(op) - i);
-                return index;
-            }
-        }
-        return index;
-    }
 
     public static int calPoints(String[] ops) {
         int result;
@@ -88,24 +76,34 @@ class Solution {
         for (String op : filteredOpsArray) {
             if (isInteger(op)) {
                 if (isBetween(Integer.parseInt(op), (-3 * 104), (3 * 104))) {
-                    System.out.println("this is a number");
+                    System.out.println(op + " has been added");
                 }
             } else if (op.equalsIgnoreCase("d")) {
-                if (getLastIntegerDoubled(op, filteredOpsArrayList) != null) {
-                    filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(getLastIntegerDoubled(op, filteredOpsArrayList)));
+Integer doubleOfLastInteger = getLastIntegerDoubled(op, filteredOpsArrayList);
+
+                if (doubleOfLastInteger != null) {
+                    filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(doubleOfLastInteger));
                 } else {
                     filteredOpsArrayList.remove(op);
                 }
-
             } else if (op.equalsIgnoreCase("+")) {
                 System.out.println("this is +");
                 filteredOpsArrayList.set(filteredOpsArrayList.indexOf(op), String.valueOf(getSumOfLastTwoIntegers(op, filteredOpsArrayList)));
             } else if (op.equalsIgnoreCase("c")) {
                 try {
-                    filteredOpsArrayList.remove(getIndexForCop(op, filteredOpsArrayList));
+
+                    filteredOpsArrayList.remove(filteredOpsArrayList.indexOf(op) - 1);
                 } catch (Exception e) {
-                    System.out.println(e);
+
+                    if (e.toString().equals("java.lang.ArrayIndexOutOfBoundsException: -1"))
+
+                        System.out.println("provide number before " + op + " operation");
+                    else System.out.println(e);
+
+
                 }
+
+
                 filteredOpsArrayList.remove(op);
             } else {
                 System.out.println("Invalid entry");
